@@ -3,8 +3,11 @@
 #include <iostream>
 #if 0 // =========== GLOBAL TO DO =============
 
-    1) implement Append method
-    2) implement SetElement method
+    1) [x] implement Append method 
+    2) [x] implement SetElement method
+    3) [ ] Create TEST Class and test cases from append and setelement
+    4) [ ] Test Append
+    5) [ ] Test SetElement -
 
     --> write your own implementation, then confer with GenQuest to see if theres anything to add
     --> Debug and release mode error handling.
