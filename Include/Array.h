@@ -5,9 +5,16 @@
 
     1) [x] implement Append method 
     2) [x] implement SetElement method
-    3) [ ] Create TEST Class and test cases from append and setelement
-    4) [ ] Test Append
-    5) [ ] Test SetElement -
+    3) [x] Create TEST Class and test cases from append and setelement
+    4) [x] Test Append
+    5) [x] Test SetElement -
+    6) [ ] Consider if SetElement works the way I want it to --> Is there a better way to create an array and preinitialize the values, versus creating the container, then individually setting each index to be a specific value.  This is how SetElement works and I'm not sure if thats a good' way of doing things.
+    7) [ ] Continue on makin the rest of the Array Class
+
+    ...) [ ] Start documenting some of the things you learn on a website
+                --> squarespace?  github pages?  
+                --> Non-trivial things that you did not expect would be worthwhile
+                    to mention: template issue with .cpp file, TEST class, Array method things and considerations
 
     --> write your own implementation, then confer with GenQuest to see if theres anything to add
     --> Debug and release mode error handling.
