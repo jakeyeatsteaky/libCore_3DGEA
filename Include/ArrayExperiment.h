@@ -1,5 +1,6 @@
-#ifndef ARRAY_H
-#define ARRAY_H
+#ifndef ARRAY_EXPERIMENT_H
+#define ARRAY_EXPERIMENT_H
+
 #include <iostream>
 #if 0 // =========== GLOBAL TO DO =============
 
@@ -9,8 +10,7 @@
     4) [x] Test Append
     5) [x] Test SetElement -
     6) [ ] Consider if SetElement works the way I want it to --> Is there a better way to create an array and preinitialize the values, versus creating the container, then individually setting each index to be a specific value.  This is how SetElement works and I'm not sure if thats a good' way of doing things.
-    7) [ ] Experimental Array - using Element struct to create isEmpty flags
-    8) [ ] Fix existing test cases for Array (non-experimental) -- append and Setelement are messed up from m_count = 0 on init
+    7)      [ ] Create "element set" bit field to be able to correctly increment count with set element
     8) [ ] Continue on makin the rest of the Array Class
 
     ...) [ ] Start documenting some of the things you learn on a website
@@ -28,14 +28,33 @@ class Array
 {
 public:
 
+    struct Element {
+        T value;
+        bool empty;
+
+        Element(){
+            new (&value) T();
+            empty = true;
+        }
+
+        ~Element() {
+            if (!empty) {
+                value.~T();
+            }
+        }
+    };
 
     inline Array(size_t size = 1, size_t growBy = 1): m_count(0), m_size(size), m_growBy(growBy) {
-        m_memBlock = new T[m_size]; // "new" operator calls default constructors for T.  Using malloc requires for loop of 'placement new' to initialize elements with default constructor
+        m_memBlock = new Element[m_size]; // "new" operator calls default constructors for T.  Using malloc requires for loop of 'placement new' to initialize elements with default constructor
+    }
+
+    inline QuickAdd(size_t idx, const T& element) {
+        m_memBlock[idx] = Element(std::move(element))
     }
 
     inline Array(const Array& other): m_count(other.m_count), m_size(other.m_size), m_growBy(other.m_growBy) {
         
-        m_memBlock = new T[m_size];
+        m_memBlock = new Element[m_size];
         for(size_t i = 0; i < m_size; ++i) {
             m_memBlock[i] = other.m_memBlock[i];
         }        
@@ -65,7 +84,7 @@ public:
         m_count = other.m_count;
         m_growBy = other.m_growBy;
 
-        m_memBlock = new T[m_count];
+        m_memBlock = new Element[m_count];
         for(size_t i = 0; i < m_count; ++i) {
             m_memBlock[i] = other.m_memBlock[i];
         }
@@ -94,8 +113,7 @@ public:
     size_t const GetCount() const;    
 
 private:
-    T* m_memBlock;
-    bool* m_isSet;
+    Element* m_memBlock;
     size_t m_count;
     size_t m_size;
     size_t m_growBy;
@@ -221,8 +239,6 @@ inline void Array<T>::SetElement(size_t idx, const T& element)
         m_memBlock[idx] = element;
     }
 }
-
-
 
 
 

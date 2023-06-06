@@ -51,33 +51,33 @@ namespace TestCases
 
             array2.SetElement(0, 1.0); 
             test2.assertEquals<float>(1.0, array2[0]);
-            test3.assertEquals<size_t>(1, array2.Size());
-            test4.assertEquals<size_t>(1, array2.GetMaxQuantity());
+            test3.assertEquals<size_t>(1, array2.GetCount());
+            test4.assertEquals<size_t>(1, array2.Size());
 
             array2.Append(2.0); 
             test2.assertEquals<float>(2.0, array2[1]);
-            test3.assertEquals<size_t>(2, array2.Size());
-            test4.assertEquals<size_t>(11, array2.GetMaxQuantity());
+            test3.assertEquals<size_t>(2, array2.GetCount());
+            test4.assertEquals<size_t>(11, array2.Size());
 
             array2.Append(3.0); 
             test2.assertEquals<float>(3.0, array2[2]);
-            test3.assertEquals<size_t>(3, array2.Size());
-            test4.assertEquals<size_t>(11, array2.GetMaxQuantity());
+            test3.assertEquals<size_t>(3, array2.GetCount());
+            test4.assertEquals<size_t>(11, array2.Size());
 
             array2.Append(4.0); 
             test2.assertEquals<float>(4.0, array2[3]);
-            test3.assertEquals<size_t>(4, array2.Size());
-            test4.assertEquals<size_t>(11, array2.GetMaxQuantity());
+            test3.assertEquals<size_t>(4, array2.GetCount());
+            test4.assertEquals<size_t>(11, array2.Size());
 
             array2.Append(5.0); 
             test2.assertEquals<float>(5.0, array2[4]);
-            test3.assertEquals<size_t>(5, array2.Size());
-            test4.assertEquals<size_t>(11, array2.GetMaxQuantity());
+            test3.assertEquals<size_t>(5, array2.GetCount());
+            test4.assertEquals<size_t>(11, array2.Size());
 
             array2.Append(6.0);
             test2.assertEquals<float>(6.0, array2[5]);
-            test3.assertEquals<size_t>(6, array2.Size());
-            test4.assertEquals<size_t>(11, array2.GetMaxQuantity());
+            test3.assertEquals<size_t>(6, array2.GetCount());
+            test4.assertEquals<size_t>(11, array2.Size());
         }
 
     }
