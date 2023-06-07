@@ -9,9 +9,10 @@
     4) [x] Test Append
     5) [x] Test SetElement -
     6) [ ] Consider if SetElement works the way I want it to --> Is there a better way to create an array and preinitialize the values, versus creating the container, then individually setting each index to be a specific value.  This is how SetElement works and I'm not sure if thats a good' way of doing things.
-    ** 7) [ ] Experimental Array - using Element struct to create isEmpty flags
-    ** 8) [ ] Fix existing test cases for Array (non-experimental) -- append and Setelement are messed up from m_count = 0 on init
-    9) [ ] Continue on makin the rest of the Array Class
+    7) [x] Experimental Array - using Element struct to create isEmpty flags
+    8) [ ] Fix existing test cases for Array (non-experimental) -- append and Setelement are messed up from m_count = 0 on init
+    **9) [ ] Write test cases for Array_Ex -> this could be the default array
+   10) [ ] Continue on makin the rest of the Array Class
 
     ...) [ ] Start documenting some of the things you learn on a website
                 --> squarespace?  github pages?  

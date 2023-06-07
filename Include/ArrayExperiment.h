@@ -10,22 +10,49 @@ class Array_Ex
 public:
 
     struct Element {
-        T value = 0;
-        bool empty = true;
+        T m_data = 0;
+        bool m_empty = true;
 
-        Element(){
-            new (&value) T();
-            empty = true;
+        inline Element(){             // Default Ctor
+            new (&m_data) T(); // placement new to call the T ctor at the memory location of the Element member: data
+            m_empty = true;
         }
 
-        Element(const T& data) {
-            value = data;
-            empty = false;
+        inline Element(const T& data) {    // Ctor for Array initialiation list instantiation
+            m_data = data;
+            m_empty = false;
+        }
+
+        inline Element(const Element& copy) {
+            m_data = copy.m_data;
+            m_empty = copy.m_empty; 
+        }
+
+        inline Element(const Element&& move) noexcept{
+            m_data = std::move(move.m_data);
+            m_empty = move.m_empty;
+        }
+
+        inline Element& operator= (const Element& other) {
+            if(this != &other) {
+                m_data = other.m_data;
+                m_empty = other.m_empty;
+            }
+            return *this;
+        }
+
+        inline Element& operator= (const Element&& other) noexcept {
+            if(this != &other)
+            {
+                m_data = std::move(other.m_data);
+                m_empty = other.m_empty;
+            }
+            return *this;
         }
 
         ~Element() {
-            if (!empty) {
-                value.~T();
+            if (!m_empty) {
+                m_data.~T();
             }
         }
     };
@@ -54,47 +81,46 @@ public:
             other.m_memBlock = nullptr;
             other.m_count = 0;
             other.m_size = 0;
+    }
+
+    inline Array_Ex& operator=(const Array_Ex& copy) {
+        if(this == &copy)
+            return *this;
+        delete[] m_memBlock;
+
+        m_size = copy.m_size;
+        m_count = copy.m_count;
+        m_growBy = copy.m_growBy;
+
+        m_memBlock = new Element[m_count];
+        for(size_t i = 0; i < m_size; ++i) {
+            m_memBlock[i] = copy.m_memBlock[i];
         }
+
+        return *this;
+    }
+
+    inline Array_Ex& operator=(const Array_Ex&& move) {
+        if(this != &move) {
+            m_memBlock = std::exchange(move.m_memBlock, nullptr);
+            m_count = std::exchange(move.m_count, 0);
+            m_size = std::exchange(move.m_size, 0);
+            m_growBy = std::exchange(move.m_growBy, 0);
+        }
+        return *this;
+    }
 
     inline ~Array_Ex() {
         delete[] m_memBlock;
     }
 
-    inline Array_Ex& operator=(const Array_Ex& other) {
-        if (&other == this)
-            return *this;
-        
-        delete[] m_memBlock; // free existing resources
-
-        m_size = other.m_size;
-        m_count = other.m_count;
-        m_growBy = other.m_growBy;
-
-        m_memBlock = new Element[m_count];
-        for(size_t i = 0; i < m_count; ++i) {
-            m_memBlock[i] = other.m_memBlock[i];
-        }
-
-        return *this;
-    }
-
-    inline Array_Ex& operator=(Array_Ex&& other) noexcept {
-        if(this != &other) {
-            m_memBlock = std::exchange(other.m_memBlock, nullptr);
-            m_count = std::exchange(other.m_count, 0);
-            m_size = std::exchange(other.m_size, 0);
-            m_growBy = std::exchange(other.m_growBy, 0);
-        }
-        return *this;
-    }
-
     size_t Size() const;
-    T* Data();
-    const T* Data() const;
+    Element* Data();
+    const Element* Data() const;
     T& operator[] (size_t idx);
     const T& operator[] (size_t idx) const;
-    void Append(const T& element);
-    void SetElement(size_t idx, const T& element);
+    void Append(const T& element_data);
+    void SetElement(size_t idx, const T& element_data);
     size_t const GetGrowBy() const;
     size_t const GetCount() const;    
 
@@ -113,13 +139,13 @@ inline size_t Array_Ex<T>::Size() const
 }
 
 template <typename T>
-inline T* Array_Ex<T>::Data()
+inline typename Array_Ex<T>::Element* Array_Ex<T>::Data()
 {
     return m_memBlock;
 }
 
 template <typename T>
-inline const T* Array_Ex<T>::Data() const
+inline const typename Array_Ex<T>::Element* Array_Ex<T>::Data() const
 {
     return m_memBlock;
 }
@@ -148,7 +174,7 @@ inline T& Array_Ex<T>::operator[] (size_t idx)
         if(idx < 0) 
             idx = 0;
     #endif 
-        return m_memBlock[idx]; 
+        return m_memBlock[idx].m_data; 
 }
 
 template <typename T>
@@ -163,18 +189,19 @@ inline const T& Array_Ex<T>::operator[] (size_t idx) const
         if(idx < 0) 
             idx = 0;
     #endif 
-        return m_memBlock[idx]; 
+        return m_memBlock[idx].m_data; 
 }
 
 template <typename T>
-inline void Array_Ex<T>::Append (const T& element)
+inline void Array_Ex<T>::Append (const T& element_data)
 {
-    // Add element to Array_Ex at position = quantity, and will increment quantity by 1
-    // If the memory block for this Array_Ex is full, it will dynamically resize to accomodate the new element
+    // Append(...) will add the T data to the next available space in this Array object.  
+    // if the Array is "full", it will resize to accomodate the space in which case
+    // T data will be placed at index = previous m_size;
     if(m_count == m_size)
     {
         size_t newSize = m_count + m_growBy;
-        T* tempBlock = new (std::nothrow) T[newSize]; //std::nothrow returns nullptr if resize allocation fails
+        Element* tempBlock = new (std::nothrow) Element[newSize]; //std::nothrow returns nullptr if resize allocation fails
         if(tempBlock)
         {
             for(size_t i = 0; i < m_count; ++i) {
@@ -197,17 +224,18 @@ inline void Array_Ex<T>::Append (const T& element)
             throw std::runtime_error("Memory Allocation Failed: Array_Ex::Append()\n");
         }
     }
-    m_memBlock[m_count] = element;
+    m_memBlock[m_count] = Element(element_data);
     m_count++;
 }
 
 template <typename T>
-inline void Array_Ex<T>::SetElement(size_t idx, const T& element)
+inline void Array_Ex<T>::SetElement(size_t idx, const T& element_data)
 {
-    // Set element at any index.  If the index is outside the size of the Array_Ex, resize so that idx = newQuantity-1
+    // the Data element_data is set at the specified idx
+    // if Idx is > size, the array will be resized so that idx = newSize-1
     if(idx > m_size) {
         size_t newSize = idx + 1;
-        T* tempBlock = new (std::nothrow) T[newSize];
+        Element* tempBlock = new (std::nothrow) Element[newSize];
         if(tempBlock) {
             for(size_t i = 0; i < m_size; ++i) {
                 tempBlock[i] = std::move(m_memBlock[i]);
@@ -222,10 +250,13 @@ inline void Array_Ex<T>::SetElement(size_t idx, const T& element)
         }
     }
     else {
-        m_memBlock[idx] = element;
+
+        m_memBlock[idx].m_data = element_data;
+        if(m_memBlock[idx].m_empty) {
+            m_memBlock[idx].m_empty = false;
+            m_count++;
+        }
     }
 }
-
-
 
 #endif

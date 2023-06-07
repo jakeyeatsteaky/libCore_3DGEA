@@ -2,6 +2,7 @@
 #define TEST_H
 
 #include "Array.h"
+#include "ArrayExperiment.h"
 
 class TEST {
 public:
@@ -9,10 +10,10 @@ public:
     ~TEST() = default;
 
     template <typename T>
-    void assertEquals(const T& expected, const T& actual);
+    void assertEquals(const T& expected, const T& actual, size_t count = 0);
 
     template <typename T>
-    void assertTrue(const T& condition);
+    void assertTrue(const T& condition, size_t count = 0);
 
 private:
     std::string m_testName;
@@ -20,7 +21,7 @@ private:
 
 namespace TestCases 
 {
-    void TestArray();
+    void TestArray(bool experimental);
 }
 
 
