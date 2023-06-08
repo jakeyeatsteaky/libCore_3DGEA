@@ -54,9 +54,103 @@ namespace TestCases
 
             {
                 Array_Ex<int>::Element element(10);
+                Array_Ex<int>::Element copyElement(element);
+                Array_Ex<int>::Element assignCopyElement = copyElement;
+
                 TEST testElement("Test Data Specific Element Ctor");
                 testElement.assertEquals(element.m_data, 10, 1);
                 testElement.assertTrue(element.m_empty == false, 2);
+
+                TEST testElement2("Test Copy CTor");
+                testElement2.assertEquals(element.m_data, copyElement.m_data, 1);
+                testElement2.assertTrue(copyElement.m_empty == false, 2);
+
+                TEST testElement3("Test Copy Assignment Operator");
+                testElement3.assertEquals(assignCopyElement.m_data, copyElement.m_data, 1);
+                testElement3.assertTrue(assignCopyElement.m_empty == false, 2);
+            }
+
+            {
+                Array_Ex<double>::Element element(5.5);
+                Array_Ex<double>::Element moveElement(std::move(element));
+
+                TEST test1("Test Move CTor/AssignOp");
+                test1.assertEquals(moveElement.m_data, element.m_data, 1);
+
+                Array_Ex<double>::Element moveAssign = std::move(moveElement);
+                test1.assertEquals(moveAssign.m_data, moveElement.m_data, 2);
+            }
+
+            #if 0
+                Array_Ex Testing:
+                [x] Default constructor
+                [x] Specified constructor
+                [ ] Constructor with initialization list
+                    [ ] std::initliazer list
+                    [x] take an array as arrguemnt
+                    [ ] Variadic arg -- parameterpack
+                [ ] Copy Constructors
+                [ ] Move Constructor
+                [ ] Copy Assignment Operator
+                [ ] Move Assignment Operator
+                [ ] Destructor
+                [x] Size method
+                [ ] Data methods
+                [ ] operator [] methods
+                [ ] At method
+                [ ] Append
+                [ ] SetElement
+            #endif
+
+            // Test Array_Ex Rule of 5
+            {
+                Array_Ex<int> array1;
+                TEST test1("Test Default Ctor Array");
+                test1.assertEquals(array1.Size(), static_cast<size_t>(5), 1);
+                test1.assertEquals(array1.GetGrowBy(), static_cast<size_t>(5), 2);
+                bool isEmpty;
+                for(size_t i = 0; i < array1.Size(); ++i) {
+                    if(!array1[i].m_empty) {
+                        isEmpty = false;
+                        break;
+                    }
+                    isEmpty = true;
+                }
+                test1.assertTrue(isEmpty == true, 3);
+            }
+
+            {
+                Array_Ex<int> array1(10,5);
+                TEST test1("Test Specified Ctor Array");
+                test1.assertEquals(array1.Size(), static_cast<size_t>(10), 1);
+                test1.assertEquals(array1.GetGrowBy(), static_cast<size_t>(5), 2);
+                bool isEmpty;
+                for(size_t i = 0; i < array1.Size(); ++i) {
+                    if(!array1[i].m_empty) {
+                        isEmpty = false;
+                        break;
+                    }
+                    isEmpty = true;
+                }
+                test1.assertTrue(isEmpty == true, 3);
+                
+            }
+
+            {
+                TEST test1("Test Constructor with Initialization list (T[] argument)");
+                int someData[] = {1, 2, 3, 4, 5, 6, 7};
+
+                Array_Ex<int> array1(someData, 7);
+                for(size_t i = 0; i < array1.Size(); ++i) {
+                    test1.assertEquals(array1.At(i), someData[i], i+1);
+                }
+                test1.assertTrue(array1.GetCount() == 7,8);
+
+                TEST test2("Test Constructor with Initliazatiion List (Parameter Pack)");
+
+
+
+                TEST test2("Test Constructor with Initliazatiion List (std::initializerlist)");
             }
         }
 

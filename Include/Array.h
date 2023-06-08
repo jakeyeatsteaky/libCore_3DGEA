@@ -12,6 +12,7 @@
     7) [x] Experimental Array - using Element struct to create isEmpty flags
     8) [ ] Fix existing test cases for Array (non-experimental) -- append and Setelement are messed up from m_count = 0 on init
     **9) [ ] Write test cases for Array_Ex -> this could be the default array
+         [ ] Finish sub TODO list within Array_Ex --> found in TEST.cpp line 66
    10) [ ] Continue on makin the rest of the Array Class
 
     ...) [ ] Start documenting some of the things you learn on a website

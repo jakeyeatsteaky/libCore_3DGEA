@@ -15,7 +15,7 @@ public:
 
         inline Element(){             // Default Ctor
             new (&m_data) T(); // placement new to call the T ctor at the memory location of the Element member: data
-            m_empty = true;
+            m_empty = true;        
         }
 
         inline Element(const T& data) {    // Ctor for Array initialiation list instantiation
@@ -52,21 +52,47 @@ public:
 
         ~Element() {
             if (!m_empty) {
+                std::cout << "Destroying Element containing " << sizeof(T) << " bytes.  Value = " << m_data << std::endl;
                 m_data.~T();
+                
             }
         }
     };
 
-    inline Array_Ex(size_t size = 1, size_t growBy = 1): m_count(0), m_size(size), m_growBy(growBy) {
+    inline Array_Ex(size_t size = 5, size_t growBy = 5): 
+        m_count(0), 
+        m_size(size), 
+        m_growBy(growBy) 
+    {
         m_memBlock = new Element[m_size]; // "new" operator calls default constructors for T.  Using malloc requires for loop of 'placement new' to initialize elements with default constructor
     }
 
-    inline void QuickAdd(size_t idx, const T& elementData) {
-        m_memBlock[idx] = std::move(Element(elementData));
+    inline Array_Ex(T* data, size_t numElements, size_t growBy = 5) :
+        m_count(0),
+        m_size(numElements),
+        m_growBy(growBy)
+    {
+        try {
+            if (data == nullptr) 
+                throw std::invalid_argument("Invalid data pointer: nullptr");
+            if (numElements == 0) 
+                throw std::invalid_argument("Invalid number of elements: 0");
+            m_memBlock = new Element[m_size];
+            for(size_t i = 0; i < m_size; ++i) {
+                this->SetElement(i, data[i]);
+            }
+        } catch (const std::exception& ex) {
+            std::cout << "Exception occurred: " << ex.what() << std::endl;
+            delete[] m_memBlock;
+        }
+        
     }
 
-    inline Array_Ex(const Array_Ex& other): m_count(other.m_count), m_size(other.m_size), m_growBy(other.m_growBy) {
-        
+    inline Array_Ex(const Array_Ex& other): 
+        m_count(other.m_count), 
+        m_size(other.m_size), 
+        m_growBy(other.m_growBy) 
+    {    
         m_memBlock = new Element[m_size];
         for(size_t i = 0; i < m_size; ++i) {
             m_memBlock[i] = other.m_memBlock[i];
@@ -117,8 +143,12 @@ public:
     size_t Size() const;
     Element* Data();
     const Element* Data() const;
-    T& operator[] (size_t idx);
-    const T& operator[] (size_t idx) const;
+
+    // operator[] returns the element at the index
+    // use method .At() to get the data value at a specified element
+    Element& operator[] (size_t idx);
+    const Element& operator[] (size_t idx) const;
+    const T& At(size_t idx) const;
     void Append(const T& element_data);
     void SetElement(size_t idx, const T& element_data);
     size_t const GetGrowBy() const;
@@ -163,7 +193,7 @@ inline const size_t Array_Ex<T>::GetGrowBy() const
 }
 
 template <typename T>
-inline T& Array_Ex<T>::operator[] (size_t idx)
+inline typename Array_Ex<T>::Element& Array_Ex<T>::operator[] (size_t idx)
 {
     #ifdef DEBUG
         if(idx > m_size - 1 || idx < 0) 
@@ -174,11 +204,11 @@ inline T& Array_Ex<T>::operator[] (size_t idx)
         if(idx < 0) 
             idx = 0;
     #endif 
-        return m_memBlock[idx].m_data; 
+        return m_memBlock[idx]; 
 }
 
 template <typename T>
-inline const T& Array_Ex<T>::operator[] (size_t idx) const
+inline const typename Array_Ex<T>::Element& Array_Ex<T>::operator[] (size_t idx) const
 {
     #ifdef DEBUG
         if(idx > m_size - 1 || idx < 0) 
@@ -189,7 +219,13 @@ inline const T& Array_Ex<T>::operator[] (size_t idx) const
         if(idx < 0) 
             idx = 0;
     #endif 
-        return m_memBlock[idx].m_data; 
+        return m_memBlock[idx]; 
+}
+
+template <typename T>
+inline const T& Array_Ex<T>::At(size_t idx) const 
+{
+    return m_memBlock[idx].m_data;
 }
 
 template <typename T>
