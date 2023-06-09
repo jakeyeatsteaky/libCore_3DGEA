@@ -31,11 +31,19 @@ class Array
 public:
 
 
-    inline Array(size_t size = 1, size_t growBy = 1): m_count(0), m_size(size), m_growBy(growBy) {
+    inline Array(size_t size = 1, size_t growBy = 1): 
+        m_count(0), 
+        m_size(size), 
+        m_growBy(growBy) 
+    {
         m_memBlock = new T[m_size]; // "new" operator calls default constructors for T.  Using malloc requires for loop of 'placement new' to initialize elements with default constructor
     }
 
-    inline Array(const Array& other): m_count(other.m_count), m_size(other.m_size), m_growBy(other.m_growBy) {
+    inline Array(const Array& other): 
+        m_count(other.m_count), 
+        m_size(other.m_size), 
+        m_growBy(other.m_growBy) 
+    {
         
         m_memBlock = new T[m_size];
         for(size_t i = 0; i < m_size; ++i) {

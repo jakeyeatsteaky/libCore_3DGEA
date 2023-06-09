@@ -137,20 +137,46 @@ namespace TestCases
             }
 
             {
-                TEST test1("Test Constructor with Initialization list (T[] argument)");
+                TEST test1("Test Constructor with data array");
                 int someData[] = {1, 2, 3, 4, 5, 6, 7};
-
+                int* badData = nullptr;
+                size_t testCount = 1;
                 Array_Ex<int> array1(someData, 7);
-                for(size_t i = 0; i < array1.Size(); ++i) {
-                    test1.assertEquals(array1.At(i), someData[i], i+1);
-                }
-                test1.assertTrue(array1.GetCount() == 7,8);
+                Array_Ex<int> array2(badData, 1);
+                Array_Ex<int> array3(someData, 0);
 
+                for(size_t i = 0; i < array1.Size(); ++i) {
+
+                    test1.assertEquals(array1.At(i), someData[i], testCount);
+                    testCount++;
+                }
+                test1.assertTrue(array1.GetCount() == 7,testCount);
+                test1.assertTrue(array2.Size() == 1, testCount+1);
+                test1.assertTrue(array2.At(0) == 0xDEADBEEF, testCount+2);
+                test1.assertTrue(array3.At(0) == 0xDEADBEEF, testCount+3);
+                test1.assertTrue(array3.Size() == 1, testCount+4);
+            }
+
+            {
+                TEST test("Test Constructor with Initliazatiion List (std::initializerlist)");
+                size_t testCount = 1;
+                Array_Ex array({1,2,3,4,5,6,7});
+
+                test.assertEquals(array.Size(), static_cast<size_t>(7), testCount++);
+                test.assertEquals(array.GetCount(), static_cast<size_t>(7), testCount++);
+                for(size_t i = 0; i < 7; ++i) {
+                    test.assertTrue(array[i].m_empty == false, testCount + i + 1);
+                    test.assertEquals(array.At(i), static_cast<int>(i+1), testCount + i + 2);
+                }
+
+
+
+
+            }
+
+            {
                 TEST test2("Test Constructor with Initliazatiion List (Parameter Pack)");
 
-
-
-                TEST test2("Test Constructor with Initliazatiion List (std::initializerlist)");
             }
         }
 

@@ -2,6 +2,7 @@
 #define ARRAY_EXPERIMENT_H
 
 #include <iostream>
+#include <initializer_list>
 
 
 template <typename T>
@@ -75,17 +76,51 @@ public:
         try {
             if (data == nullptr) 
                 throw std::invalid_argument("Invalid data pointer: nullptr");
+        } 
+        catch (const std::exception& ex) {
+            std::cout << "Exception occurred: " << ex.what() << std::endl;
+            m_memBlock = new Element[1];
+            this->SetElement(0, static_cast<T>(0xDEADBEEF));
+            return;
+        }
+
+        try {
             if (numElements == 0) 
                 throw std::invalid_argument("Invalid number of elements: 0");
-            m_memBlock = new Element[m_size];
-            for(size_t i = 0; i < m_size; ++i) {
-                this->SetElement(i, data[i]);
-            }
-        } catch (const std::exception& ex) {
+        }
+        catch (const std::exception& ex) {
             std::cout << "Exception occurred: " << ex.what() << std::endl;
-            delete[] m_memBlock;
+            m_memBlock = new Element[1];
+            m_size = 1;
+            this->SetElement(0, static_cast<T>(0xDEADBEEF));
+            return;
+        }
+
+        m_memBlock = new Element[m_size];
+        for(size_t i = 0; i < m_size; ++i) {
+            this->SetElement(i, data[i]);
         }
         
+    }
+
+    inline Array_Ex(std::initializer_list<T> list) : Array_Ex(list.begin(), list.end()) {}
+
+    inline Array_Ex(typename std::initializer_list<T>::const_iterator begin, 
+                    typename std::initializer_list<T>::const_iterator end, size_t growBy = 5):
+                    m_memBlock(nullptr),
+                    m_count(0),
+                    m_size(0),
+                    m_growBy(growBy)
+    {
+        size_t numElements = std::distance(begin, end);
+        m_size = numElements;
+        m_memBlock = new Element[m_size];
+
+        for(size_t i = 0; i < m_size; ++i) {
+            m_memBlock[i] = Element(*begin);
+            begin++;
+            m_count++;
+        }
     }
 
     inline Array_Ex(const Array_Ex& other): 
