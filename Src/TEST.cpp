@@ -95,26 +95,6 @@ namespace TestCases
                 endCheck = test1.getEndCheck();
             }
 
-            #if 0
-                Array Testing:
-                [x] Default constructor
-                [x] Specified constructor
-                [x] Constructor with initialization list
-                    [x] std::initliazer list
-                    [x] take an array as arrguemnt
-                [x] Copy Constructors
-                [x] Move Constructor
-                [x] Copy Assignment Operator
-                [x] Move Assignment Operator
-                [x] Destructor
-                [x] Size method
-                [x] Data methods
-                [x] operator [] methods
-                [x] At method
-                [x] Append
-                [x] SetElement
-            #endif
-
             // Test Array Rule of 5
             {
                 Array<int> array1;
@@ -287,7 +267,6 @@ namespace TestCases
             }
         }
 
-        endCheck ? std::cout << "ALL TEST CASES PASSED" : std::cout << "SOME TEST CASE FAILURES";
-        std::cout << std::endl;
+        endCheck ? std::cout << "ALL TEST CASES PASSED\n" : std::cout << "SOME TEST CASE FAILURES\n";
     }
 }

@@ -17,7 +17,8 @@
     8) [x] Fix existing test cases for Array_Deprecated (non-experimental) -- append and Setelement are messed up from m_count = 0 on init
     **9) [x] Write test cases for Array_Ex -> this could be the default array
          [x] Finish sub TODO list within Array_Ex --> found in TEST.cpp line 66
-   10) [ ] Continue on makin the rest of the Array_Deprecated Class
+   10) [ ] Write out the things you learned in Array_Ex
+   11) [ ] Remove (expensive), and RemoveAll methods
 
     ...) [ ] Start documenting some of the things you learn on a website
                 --> squarespace?  github pages?  
@@ -203,13 +204,13 @@ public:
     Element* Data();
     const Element* Data() const;
 
-    // operator[] returns the element at the index
-    // use method .At() to get the data value at a specified element
     Element& operator[] (size_t idx);
     const Element& operator[] (size_t idx) const;
     const T& At(size_t idx) const;
     void Append(const T& element_data);
     void SetElement(size_t idx, const T& element_data);
+    void Remove(size_t idx);
+    void RemoveAll();
     size_t const GetGrowBy() const;
     size_t const GetCount() const;    
 
