@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Array.h"
-#include "ArrayExperiment.h"
+#include "GlobalIncludes.h"
 #include "TEST.h"   
 
 int main(int argc, char** argv)

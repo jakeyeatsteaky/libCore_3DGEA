@@ -2,7 +2,7 @@
 #define TEST_H
 
 #include "Array.h"
-#include "ArrayExperiment.h"
+#include "ArrayDeprecated.h"
 
 class TEST {
 public:
@@ -15,8 +15,11 @@ public:
     template <typename T>
     void assertTrue(const T& condition, size_t count = 0);
 
+    bool getEndCheck() { return m_endCheck; }
+
 private:
     std::string m_testName;
+    bool m_endCheck;
 };
 
 namespace TestCases 
