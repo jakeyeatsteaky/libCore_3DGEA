@@ -207,6 +207,45 @@ namespace TestCases
                 
                 endCheck = test.getEndCheck();
             }
+
+            {
+                TEST test("Test Array::Remove Method");
+                size_t testCount = 0;
+                Array<int> array(5, 5);
+                array.SetElement(0, 1);
+                array.SetElement(1, 2);
+                array.SetElement(2, 3);
+                array.PrintContents();
+                array.Remove(2);
+                array.PrintContents();
+                test.assertEquals(array.GetCount(), static_cast<size_t>(2), ++testCount);
+                array.SetElement(2,3);
+                array.SetElement(3,4);
+                array.SetElement(4,5);
+                test.assertEquals(array.GetCount(), static_cast<size_t>(5), ++testCount);
+                test.assertEquals(array.Size(), static_cast<size_t>(5), ++testCount);
+                array.Remove(2);
+                array.PrintContents();
+                test.assertEquals(array.GetCount(), static_cast<size_t>(4), ++testCount);
+                test.assertEquals(array.At(3), 5, ++testCount);
+                array.Remove(0);
+                array.PrintContents();
+                test.assertEquals(array.At(0), 2, ++testCount);
+                test.assertEquals(array.GetCount(), static_cast<size_t>(3), ++testCount);
+                array.SetElement(0,1);
+                array.SetElement(1,2);
+                array.SetElement(2,3);
+                array.SetElement(3,4);
+                array.SetElement(4,5);
+                array.PrintContents();
+                array.Remove(4);
+                array.PrintContents();
+                array.SetElement(4,5);
+                array.PrintContents();
+                array.RemoveAll();
+                array.PrintContents();
+                test.assertEquals(array.GetCount(), static_cast<size_t>(0), ++testCount); 
+            }
         }
 
         else 

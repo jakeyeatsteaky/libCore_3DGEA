@@ -17,9 +17,12 @@
     8) [x] Fix existing test cases for Array_Deprecated (non-experimental) -- append and Setelement are messed up from m_count = 0 on init
     **9) [x] Write test cases for Array_Ex -> this could be the default array
          [x] Finish sub TODO list within Array_Ex --> found in TEST.cpp line 66
-   10) [ ] Write out the things you learned in Array_Ex
-   11) [ ] Remove (expensive), and RemoveAll methods
-
+   10) [x] Write out the things you learned in Array_Ex
+   11) [x] Remove (expensive), and RemoveAll methods
+   12) [ ] Write out Remove methods
+   13) [ ] Finish NDEBUG case for Remove methods
+   14) [ ] Finish the damn Array
+    
     ...) [ ] Start documenting some of the things you learn on a website
                 --> squarespace?  github pages?  
                 --> Non-trivial things that you did not expect would be worthwhile
@@ -209,10 +212,11 @@ public:
     const T& At(size_t idx) const;
     void Append(const T& element_data);
     void SetElement(size_t idx, const T& element_data);
-    void Remove(size_t idx);
+    void Remove(const size_t idx);
     void RemoveAll();
-    size_t const GetGrowBy() const;
-    size_t const GetCount() const;    
+    const size_t GetGrowBy() const;
+    const size_t GetCount() const;    
+    const void PrintContents() const;    
 
 private:
     Element* m_memBlock;
@@ -360,6 +364,47 @@ inline void Array<T>::SetElement(size_t idx, const T& element_data)
     if(m_memBlock[idx].m_empty) {
         m_memBlock[idx].m_empty = false;
         m_count++;
+    }
+}
+
+template <typename T>
+inline const void Array<T>::PrintContents() const 
+{
+    for(size_t i = 0; i < m_count; ++i) {
+        std::cout << m_memBlock[i].m_data << std::endl;
+    }
+}
+
+template <typename T>
+inline void Array<T>::Remove(const size_t idx)
+{
+    #ifdef DEBUG
+        if(idx < m_size)
+        {
+            bool decrementCount = !(m_memBlock[idx].m_empty);
+            for(size_t i = idx; i < m_size - 1; ++i) {
+                m_memBlock[i].~Element();   // if T of Element has dynamically allocated memory, desctructor must be called
+                m_memBlock[i] = m_memBlock[i + 1];
+            }
+            this->m_memBlock[m_size-1].~Element();
+            this->m_memBlock[m_size-1] = Element();
+            this->m_memBlock[m_size-1].m_empty = true;
+
+            if(decrementCount)
+                m_count--;
+        }
+        else
+            throw std::out_of_range("Index not within range for Array\n");
+    #else
+    #endif
+}
+
+template <typename T>
+inline void Array<T>::RemoveAll()
+{
+    int i = m_size - 1;
+    for(; i >= 0; i--) {
+        this->Remove(i);
     }
 }
 
