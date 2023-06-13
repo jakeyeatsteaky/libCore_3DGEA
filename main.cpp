@@ -5,7 +5,6 @@
 
 int main(int argc, char** argv)
 {
-    TestCases::TestArray(true);
-
+    TestCases::TestArray(true);-
     return 0;
 }

@@ -19,10 +19,10 @@
          [x] Finish sub TODO list within Array_Ex --> found in TEST.cpp line 66
    10) [x] Write out the things you learned in Array_Ex
    11) [x] Remove (expensive), and RemoveAll methods
-   12) [ ] Write out Remove methods
-   13) [ ] Finish NDEBUG case for Remove methods
+   12) [x] Write out Remove methods
+   13) [x] Finish NDEBUG case for Remove methods
    14) [ ] Finish the damn Array
-    
+
     ...) [ ] Start documenting some of the things you learn on a website
                 --> squarespace?  github pages?  
                 --> Non-trivial things that you did not expect would be worthwhile
@@ -396,6 +396,19 @@ inline void Array<T>::Remove(const size_t idx)
         else
             throw std::out_of_range("Index not within range for Array\n");
     #else
+        if(!(idx < m_size))
+            idx = m_size-1;
+     
+        bool decrementCount = !(m_memBlock[idx].m_empty);
+        for(size_t i = idx; i < m_size - 1; ++i) {
+            m_memBlock[i].~Element();   // if T of Element has dynamically allocated memory, desctructor must be called
+            m_memBlock[i] = m_memBlock[i + 1];
+        }
+        this->m_memBlock[m_size-1].~Element();
+        this->m_memBlock[m_size-1] = Element();
+        this->m_memBlock[m_size-1].m_empty = tru 
+        if(decrementCount)
+            m_count--;
     #endif
 }
 
