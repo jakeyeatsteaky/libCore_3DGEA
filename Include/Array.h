@@ -21,7 +21,7 @@
    11) [x] Remove (expensive), and RemoveAll methods
    12) [x] Write out Remove methods
    13) [x] Finish NDEBUG case for Remove methods
-   14) [ ] Finish the damn Array
+   14) [x] Finish the damn Array
 
     ...) [ ] Start documenting some of the things you learn on a website
                 --> squarespace?  github pages?  
@@ -39,7 +39,7 @@ class Array
 public:
 
     struct Element {
-        T m_data = 0;
+        T m_data = T();
         bool m_empty = true;
 
         inline Element(){             // Default Ctor

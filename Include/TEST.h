@@ -25,6 +25,7 @@ private:
 namespace TestCases 
 {
     void TestArray(bool experimental);
+    void RunTestSuite();
 }
 
 

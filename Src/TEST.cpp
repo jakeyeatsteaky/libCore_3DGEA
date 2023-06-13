@@ -308,4 +308,9 @@ namespace TestCases
 
         endCheck ? std::cout << "ALL TEST CASES PASSED\n" : std::cout << "SOME TEST CASE FAILURES\n";
     }
+
+    void RunTestSuite()
+    {
+        TestArray(true);
+    }
 }
