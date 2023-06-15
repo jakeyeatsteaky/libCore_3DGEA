@@ -5,18 +5,8 @@
 #include "Array.h"
 
 
-#if 0 
 
-========================= GLOBAL TODO ===========================
-    1) [ ] Figure out how to structure HashItem as a composition of ListNode
-    2) [ ] Implement list node basic methods
-            [ ] Insertion
-            [ ] Deletion
-            [ ] Searching
-    3) [ ] Element destructor >> ostream bug.  See: HashTable.h -- NOT_SURE_BOUT_DIS
-    4) [ ] Finish Hash Table 
 
-#endif
 template <typename TKey, typename TValue>
 class HashTable
 {
@@ -27,6 +17,7 @@ public:
         TValue hi_value;
         ListNode<HashItem>* hi_next;
     };
+
     HashTable() {};
 
 

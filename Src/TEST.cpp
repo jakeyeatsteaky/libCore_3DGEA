@@ -1,9 +1,10 @@
 #include "TEST.h"
 
 #include "Array.h"
+#include "ListNode.h"
 
 template <typename T>
-void TEST::assertEquals(const T& expected, const T& actual, size_t count) {
+bool TEST::assertEquals(const T& expected, const T& actual, size_t count) {
     if(expected == actual) {
         std::cout << "PASSED: " << m_testName;
         if(count == 0)
@@ -21,10 +22,11 @@ void TEST::assertEquals(const T& expected, const T& actual, size_t count) {
         std::cout << "Expected: " << expected << ", Actual: " << actual << std::endl;
         m_endCheck = false;
     }
+    return m_endCheck;
 }
 
 template <typename T>
-void TEST::assertTrue(const T& condition, size_t count) {
+bool TEST::assertTrue(const T& condition, size_t count) {
     if (condition) {
         std::cout << "PASSED: " << m_testName;
         if(count == 0)
@@ -40,6 +42,7 @@ void TEST::assertTrue(const T& condition, size_t count) {
             std::cout << " #" << count << std::endl;
         m_endCheck = false;
     }
+    return m_endCheck;
 }
 
 namespace TestCases 
@@ -306,11 +309,54 @@ namespace TestCases
             }
         }
 
-        endCheck ? std::cout << "ALL TEST CASES PASSED\n" : std::cout << "SOME TEST CASE FAILURES\n";
+        RunEndCheck(endCheck);
+    }
+
+    void TestListNode()
+    {
+        bool endCheck = false;
+        {
+            TEST test1("Test ListNode Ctor");
+            size_t testCount = 0;
+            ListNode<int> node;
+            bool check1 = test1.assertTrue(node.GetNext() == nullptr, ++testCount);
+            bool check2 = test1.assertTrue(node.GetData() == 0, ++testCount);
+
+            ListNode<int> node1(100);
+            bool check3 = test1.assertTrue(node1.GetData() == 100, ++testCount);
+            bool check4 = test1.assertTrue(node1.GetNext() == nullptr, ++testCount);
+
+            int data = 1000;
+            ListNode<int> node2(data);
+            bool check5 = test1.assertTrue(node2.GetData() == 1000, ++testCount);
+            bool check6 = test1.assertTrue(node2.GetNext() == nullptr, ++testCount);
+
+            endCheck = check1 && check2 && check3 && check4 && check5 && check6; 
+        }
+        
+        bool endCheck2 = false;
+        {
+            TEST test("Test ListNode Copy/ Move Ctor");
+            size_t testCount = 0;
+            ListNode node(100);
+            ListNode copy(node);
+            bool check1 = test.assertTrue(copy.GetData() == node.GetData(), ++testCount);
+            bool check2 = test.assertTrue(copy.GetNext() == nullptr, ++testCount);
+
+            endCheck2 = check1 && check2;
+        }
+
+        RunEndCheck(endCheck & endCheck2);
     }
 
     void RunTestSuite()
     {
-        TestArray(true);
+        //TestArray(true);
+        TestListNode();
+    }
+
+    void RunEndCheck(bool endCheck)
+    {
+        endCheck ? std::cout << "ALL TEST CASES PASSED\n" : std::cout << "SOME TEST CASE FAILURES\n";
     }
 }

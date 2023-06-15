@@ -10,10 +10,10 @@ public:
     ~TEST() = default;
 
     template <typename T>
-    void assertEquals(const T& expected, const T& actual, size_t count = 0);
+    bool assertEquals(const T& expected, const T& actual, size_t count = 0);
 
     template <typename T>
-    void assertTrue(const T& condition, size_t count = 0);
+    bool assertTrue(const T& condition, size_t count = 0);
 
     bool getEndCheck() { return m_endCheck; }
 
@@ -25,7 +25,9 @@ private:
 namespace TestCases 
 {
     void TestArray(bool experimental);
+    void TestListNode();
     void RunTestSuite();
+    void RunEndCheck(bool check);
 }
 
 
