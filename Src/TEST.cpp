@@ -343,10 +343,79 @@ namespace TestCases
             bool check1 = test.assertTrue(copy.GetData() == node.GetData(), ++testCount);
             bool check2 = test.assertTrue(copy.GetNext() == nullptr, ++testCount);
 
-            endCheck2 = check1 && check2;
+            ListNode node2(1000);
+            ListNode move(std::move(node2));
+
+            bool check3 = test.assertTrue(node2.GetNext() == nullptr, ++testCount);
+            bool check4 = test.assertTrue(move.GetData() == 1000, ++testCount);
+
+            endCheck2 = check1 && check2 && check3 && check4;
         }
 
-        RunEndCheck(endCheck & endCheck2);
+        bool endCheck3 = false;
+        {
+            TEST test("Test ListNode PushBack");
+            int testCount = 0;
+            ListNode node(1);
+            node.PushBack(2);
+            bool check1 = test.assertTrue(node.GetData() == 1, ++testCount);
+            bool check2 = test.assertTrue(node.GetNext()->GetData() == 2, ++testCount);
+            node.PushBack(3);
+            bool check3 = test.assertTrue(node.GetNext()->GetNext()->GetData() == 3, ++testCount);
+            node.PushBack(4);
+            bool check4 = test.assertTrue(node.GetNext()->GetNext()->GetNext()->GetData() == 4, ++testCount);
+
+            endCheck3 = check1 && check2 && check3 && check4;
+        }
+        
+        bool endCheck4 = false;
+        {
+            TEST test("Test ListNode Destructor");
+            {
+                ListNode nodeToDestroy(100);
+                nodeToDestroy.PushBack(1);
+                nodeToDestroy.PushBack(2);
+                nodeToDestroy.PushBack(3);
+                nodeToDestroy.PushBack(4);
+                nodeToDestroy.PushBack(5);
+            }
+
+            {
+                ListNode node2(100);
+                node2.PushBack(100);
+                node2.PushBack(100);
+                node2.PushBack(100);
+                node2.PushBack(100);
+                node2.PushBack(100);
+                node2.PushBack(100);
+                node2.PushBack(100);
+                node2.PushBack(100);
+                node2.PushBack(100);
+                node2.PushBack(100);
+                node2.PushBack(100);
+            }
+            
+            endCheck4 = true;
+        }
+
+        bool endCheck5 = false;
+        {
+            TEST test("Test Delete Method");
+            int testCount = 0;
+            ListNode<int> node(1);
+            node.PushBack(2);
+            node.PushBack(3);
+            node.PushBack(4);
+            bool check1 = test.assertTrue(node.GetNext()->GetNext()->GetNext()->GetData() == 4, ++testCount);
+            node.Delete(2);
+            bool check2 = test.assertTrue(node.GetNext()->GetNext()->GetData() == 4, ++testCount);
+            node.Delete(0);
+            bool check3 = test.assertTrue(node.GetData() == 2, ++testCount);
+
+            endCheck5 = check1 && check2 && check3;
+        }
+
+        RunEndCheck(endCheck & endCheck2 & endCheck3 & endCheck4 & endCheck5);
     }
 
     void RunTestSuite()
