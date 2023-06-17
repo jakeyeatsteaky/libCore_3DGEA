@@ -406,16 +406,40 @@ namespace TestCases
             node.PushBack(2);
             node.PushBack(3);
             node.PushBack(4);
+            node.PrintNodes();
             bool check1 = test.assertTrue(node.GetNext()->GetNext()->GetNext()->GetData() == 4, ++testCount);
             node.Delete(2);
+            node.PrintNodes();
             bool check2 = test.assertTrue(node.GetNext()->GetNext()->GetData() == 4, ++testCount);
             node.Delete(0);
+            node.PrintNodes();
             bool check3 = test.assertTrue(node.GetData() == 2, ++testCount);
 
             endCheck5 = check1 && check2 && check3;
         }
 
-        RunEndCheck(endCheck & endCheck2 & endCheck3 & endCheck4 & endCheck5);
+        bool endCheck6 = false;
+        {
+            TEST test("Test Find and GetNode");
+            int testCount = 0;
+            ListNode node(1);
+            node.PushBack(2);
+            node.PushBack(3);
+            node.PushBack(4);
+            node.PushBack(5);
+            node.PushBack(6);
+            node.PrintNodes();
+
+            bool check1 = test.assertEquals(node.GetNode(3)->GetData(), 4, ++testCount);
+            bool check2 = test.assertEquals(node.GetNode(0)->GetData(), 1, ++testCount);
+            bool check3 = test.assertTrue(node.Find(9) == nullptr, ++testCount);
+            node.PrintNodes();
+            bool check4 = test.assertEquals(node.Find(3)->GetData(), 3, ++testCount);
+
+            endCheck6 = check1 && check2 && check3 && check4;
+        }
+
+        RunEndCheck(endCheck & endCheck2 & endCheck3 & endCheck4 & endCheck5 & endCheck6);
     }
 
     void RunTestSuite()

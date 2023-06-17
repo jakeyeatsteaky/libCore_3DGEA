@@ -8,20 +8,22 @@
 #if 0 
 ========================= GLOBAL TODO ===========================
     1) [ ] Figure out how to structure HashItem as a composition of ListNode
-    2) [ ] Implement list node basic methods
-            [ ] Deletion
-            [ ] Searching
+    2) [x] Implement list node basic methods
+            [x] Deletion
+            [x] Searching
             [x] PushBack
-    3) [ ] Test ListNode
+    3) [x] Test ListNode
             [x] Ctors
             [x] Dtor
             [x] copy
             [x] Move
-            [ ] Delete
-            [ ] Find
+            [x] Delete
+            [x] Find
             [x] PushBack
-    4) [ ] Element destructor >> ostream bug.  See: HashTable.h -- NOT_SURE_BOUT_DIS
-    5) [ ] Finish Hash Table 
+    5) [ ] Finish Hash Table
+            [ ] HashItem Struct - > what are the main methods needed?  Definitely need comparison operator 
+
+    N) [ ] Element destructor >> ostream bug.  See: HashTable.h -- NOT_SURE_BOUT_DIS
 
 #endif
 

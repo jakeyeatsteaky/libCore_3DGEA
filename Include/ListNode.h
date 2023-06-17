@@ -49,13 +49,15 @@ Some notes on rule of 5:
     inline T GetData() const { return m_data; }
     inline void PushBack(const T& data);
     inline ListNode* Delete(size_t idx);
-    inline ListNode& Find(T value) const{}
-    inline ListNode& GetNode(size_t idx) const{}
+    inline const ListNode* Find(const T& value) const;
+    inline const ListNode* GetNode(size_t idx) const;
+    inline void PrintNodes() const;
 
 
 private:
     T m_data;
     ListNode* m_next;
+
 };
 
 template <typename T>
@@ -63,15 +65,12 @@ inline ListNode<T>* ListNode<T>::Delete(size_t idx)
 {
     size_t count = 0;
     bool objectDeleted = false;
-    ListNode<T>* nodeToReturn = nullptr;
-    if(idx == 0) {
-        if(this->m_next)
-            nodeToReturn = this->m_next;
-
-            // Cant modify or delete this pointer
-            // Perhaps idx 0 should not be allowed?
-        delete this;
-        return nodeToReturn;
+    if(idx == 0 && this->m_next) {
+        ListNode* nodeToDelete = this->m_next;
+        this->m_data = nodeToDelete->m_data;
+        this->m_next = nodeToDelete->m_next;
+        delete nodeToDelete;
+        return this;
     }
 
     ListNode<T>* current = this;
@@ -106,5 +105,53 @@ inline void ListNode<T>::PushBack(const T& data)
         current = current->m_next;
     current->m_next = new ListNode<T>(data);
 }
+
+template <typename T>
+inline void ListNode<T>::PrintNodes() const 
+{
+    std::cout << "Node 1: " << this->m_data << std::endl;
+    ListNode* current = this->m_next;
+    int count = 1;
+    while(current){
+        std::cout << "Node " << ++count << ": " << current->m_data << std::endl;
+        current = current->m_next;
+    }
+    std::cout << " ---------------------\n";
+}
+
+template <typename T> 
+inline const ListNode<T>* ListNode<T>::GetNode(size_t idx) const 
+{
+    if(idx == 0)
+        return this;
+
+    ListNode* current = this->m_next;
+    size_t count = 1;
+    while(current) {
+        if (count == idx)
+            return current;
+        current = current->m_next;
+        ++count;
+    }
+    std::cout << "Index: " << idx << " does not exist in this list\n";
+    return this;
+}
+
+template <typename T>
+inline const ListNode<T>* ListNode<T>::Find(const T& value) const 
+{
+    if(value == this->m_data)
+        return this;
+
+    ListNode* current = this->m_next;
+    while(current) {
+        if (current->m_data == value)
+            return current;
+        current = current->m_next;
+    }
+    std::cout << "No node with value: " << value << " exists in this List\n";
+    return nullptr;
+}
+
 
 #endif
